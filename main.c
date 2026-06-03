@@ -1,73 +1,121 @@
 #include <stdio.h>
+#include <math.h>
 
-#define ROWS 15
-#define COLS 30
+int main() {
+    // 1. CREATE THE CANVAS AND VARIABLES
+    char canvas[15][30];
+    int choice = 0;
 
-char canvas[ROWS][COLS];
+    // Variables to hold user inputs for shapes
+    int r, c, length, width, height, radius;
+    int sr, sc; // start row, start col
 
-// Function 1: Fill the canvas with underscores (Blank slate)
-void initializeCanvas() {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
+    // Fill the canvas with underscores (Blank slate) at the very start
+    for (int i = 0; i < 15; i++) {
+        for (int j = 0; j < 30; j++) {
             canvas[i][j] = '_';
         }
     }
-}
 
-// Function 2: Print the 2D array to the terminal
-void displayCanvas() {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            printf("%c ", canvas[i][j]);
+    // 2. THE MAIN PROGRAM LOOP
+    // This loop keeps running the editor until the user chooses to exit (Option 5)
+    while (choice != 5) {
+        
+        // Step A: Print the current canvas to the screen
+        printf("\n=== CURRENT PICTURE ===\n");
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 30; j++) {
+                printf("%c ", canvas[i][j]);
+            }
+            printf("\n");
         }
-        printf("\n");
-    }
-}
 
-// NEW Function 3: Draw a horizontal line
-void drawLine(int row, int colStart, int colEnd) {
-    // Loop from the start column to the end column on that specific row
-    for (int j = colStart; j <= colEnd; j++) {
-        // Safety check to make sure we don't draw outside the canvas grid bounds
-        if (row >= 0 && row < ROWS && j >= 0 && j < COLS) {
-            canvas[row][j] = '*';
-        }
-    }
-}
+        // Step B: Display User Menu Options
+        printf("\n--- 2D Graphics Editor Menu ---\n");
+        printf("1. Add a Horizontal Line\n");
+        printf("2. Add a Rectangle\n");
+        printf("3. Add a Circle\n");
+        printf("4. Delete/Clear Entire Canvas\n");
+        printf("5. Save & Exit Program\n");
+        printf("Enter your choice (1-5): ");
+        scanf("%d", &choice);
 
-// NEW Function 4: Draw a rectangle
-void drawRectangle(int startRow, int startCol, int width, int height) {
-    int endRow = startRow + height - 1;
-    int endCol = startCol + width - 1;
+        // Step C: Execute Action Based on Choice (Modify/Add objects)
+        if (choice == 1) {
+            // Draw Line
+            printf("Enter row number (0-14): ");
+            scanf("%d", &r);
+            printf("Enter starting column (0-29): ");
+            scanf("%d", &sc);
+            printf("Enter line length: ");
+            scanf("%d", &length);
 
-    // Loop through the grid to draw the outer borders of the rectangle
-    for (int i = startRow; i <= endRow; i++) {
-        for (int j = startCol; j <= endCol; j++) {
-            // Safety check for boundaries
-            if (i >= 0 && i < ROWS && j >= 0 && j < COLS) {
-                // Only draw a '*' if it's on the edge of the rectangle layout
-                if (i == startRow || i == endRow || j == startCol || j == endCol) {
-                    canvas[i][j] = '*';
+            for (int j = sc; j < sc + length; j++) {
+                if (r >= 0 && r < 15 && j >= 0 && j < 30) {
+                    canvas[r][j] = '*'; // Add star
                 }
             }
+        } 
+        else if (choice == 2) {
+            // Draw Rectangle
+            printf("Enter starting row (0-14): ");
+            scanf("%d", &sr);
+            printf("Enter starting column (0-29): ");
+            scanf("%d", &sc);
+            printf("Enter width: ");
+            scanf("%d", &width);
+            printf("Enter height: ");
+            scanf("%d", &height);
+
+            int er = sr + height - 1;
+            int ec = sc + width - 1;
+
+            for (int i = sr; i <= er; i++) {
+                for (int j = sc; j <= ec; j++) {
+                    if (i >= 0 && i < 15 && j >= 0 && j < 30) {
+                        if (i == sr || i == er || j == sc || j == ec) {
+                            canvas[i][j] = '*'; // Add star on edge
+                        }
+                    }
+                }
+            }
+        } 
+        else if (choice == 3) {
+            // Draw Circle
+            printf("Enter center row (0-14): ");
+            scanf("%d", &r);
+            printf("Enter center column (0-29): ");
+            scanf("%d", &c);
+            printf("Enter radius: ");
+            scanf("%d", &radius);
+
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 30; j++) {
+                    double dist = pow(i - r, 2) + pow(j - c, 2);
+                    double rad_sq = pow(radius, 2);
+                    if (fabs(dist - rad_sq) < 1.5) {
+                        canvas[i][j] = '*'; // Add star
+                    }
+                }
+            }
+        } 
+        else if (choice == 4) {
+            // Delete / Clear Objects
+            // We modify the picture by turning all stars back into underscores!
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 30; j++) {
+                    canvas[i][j] = '_';
+                }
+            }
+            printf("\nCanvas Cleared\n");
+        }
+        else if (choice == 5) {
+            printf("\nExiting \n");
+        }
+        else {
+            printf("\nInvalid choice\n");
         }
     }
-}
 
-int main() {
-    printf("--- Day 2: 2D Graphics Editor (Lines & Rectangles) ---\n\n");
-    
-    // 1. Start with a fresh canvas
-    initializeCanvas();
-    
-    // 2. NEW: Draw a horizontal line on Row 2, from Column 5 to 25
-    drawLine(2, 5, 25);
-    
-    // 3. NEW: Draw a rectangle starting at Row 5, Column 8, Width 12, Height 6
-    drawRectangle(5, 8, 12, 6);
-    
-    // 4. Display the updated canvas
-    displayCanvas();
-    
     return 0;
 }
