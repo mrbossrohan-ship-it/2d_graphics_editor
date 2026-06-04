@@ -2,26 +2,25 @@
 #include <math.h>
 
 int main() {
-    // 1. CREATE THE CANVAS AND VARIABLES
+    
     char canvas[15][30];
     int choice = 0;
 
-    // Variables to hold user inputs for shapes
+    
     int r, c, length, width, height, radius;
     int sr, sc; // start row, start col
 
-    // Fill the canvas with underscores (Blank slate) at the very start
+    // for canvas initlzn
     for (int i = 0; i < 15; i++) {
         for (int j = 0; j < 30; j++) {
             canvas[i][j] = '_';
         }
     }
 
-    // 2. THE MAIN PROGRAM LOOP
-    // This loop keeps running the editor until the user chooses to exit (Option 5)
+    // instead of while(1)
     while (choice != 5) {
         
-        // Step A: Print the current canvas to the screen
+        // canvas print
         printf("\n=== CURRENT PICTURE ===\n");
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 30; j++) {
@@ -30,17 +29,17 @@ int main() {
             printf("\n");
         }
 
-        // Step B: Display User Menu Options
+        
         printf("\n--- 2D Graphics Editor Menu ---\n");
         printf("1. Add a Horizontal Line\n");
         printf("2. Add a Rectangle\n");
         printf("3. Add a Circle\n");
         printf("4. Delete/Clear Entire Canvas\n");
         printf("5. Save & Exit Program\n");
-        printf("Enter your choice (1-5): ");
+        printf("Enter your choice : ");
         scanf("%d", &choice);
 
-        // Step C: Execute Action Based on Choice (Modify/Add objects)
+        
         if (choice == 1) {
             // Draw Line
             printf("Enter row number (0-14): ");
@@ -52,7 +51,7 @@ int main() {
 
             for (int j = sc; j < sc + length; j++) {
                 if (r >= 0 && r < 15 && j >= 0 && j < 30) {
-                    canvas[r][j] = '*'; // Add star
+                    canvas[r][j] = '.'; 
                 }
             }
         } 
@@ -74,7 +73,7 @@ int main() {
                 for (int j = sc; j <= ec; j++) {
                     if (i >= 0 && i < 15 && j >= 0 && j < 30) {
                         if (i == sr || i == er || j == sc || j == ec) {
-                            canvas[i][j] = '*'; // Add star on edge
+                            canvas[i][j] = '.'; 
                         }
                     }
                 }
@@ -94,7 +93,7 @@ int main() {
                     double dist = pow(i - r, 2) + pow(j - c, 2);
                     double rad_sq = pow(radius, 2);
                     if (fabs(dist - rad_sq) < 1.5) {
-                        canvas[i][j] = '*'; // Add star
+                        canvas[i][j] = '.'; // Add star
                     }
                 }
             }
