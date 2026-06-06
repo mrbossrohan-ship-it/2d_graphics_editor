@@ -21,7 +21,7 @@ int main() {
     while (choice != 5) {
         
         // canvas print
-        printf("\n=== CURRENT PICTURE ===\n");
+        printf("\nCanvas\n");
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 30; j++) {
                 printf("%c ", canvas[i][j]);
